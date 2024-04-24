@@ -1,0 +1,5 @@
+@%strings/prints as PRINTS
+@%strings/puts as PUTS
+SET PUTS "Test string message newLine"
+PRINTS
+

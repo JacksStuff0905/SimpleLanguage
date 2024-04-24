@@ -1,0 +1,7 @@
+@%util/reverse as REVERSE
+
+PUSH 10 5
+PUT 2
+SWAP
+PUSH 10 5
+PUT 2
