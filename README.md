@@ -24,3 +24,18 @@ Use $ to write a command<br>
 &emsp;&emsp;<b>Input-Output:</b><br>
 &emsp;&emsp;&emsp;PRINT - prints the top most element of the main stack to the console<br>
 &emsp;&emsp;&emsp;PRINTC - prints the top most element of the main stack as a character (using UNICODE encoding) to the console<br>
+&emsp;&emsp;&emsp;INPUT - asks the user for input and pushes it onto the main stack<br>
+<br>
+&emsp;&emsp;<b>Math:</b><br>
+&emsp;&emsp;&emsp;ADD - adds the two top most elements of the main stack and pushes the result<br>
+&emsp;&emsp;&emsp;SUB - subtracts the two top most elements of the main stack and pushes the result<br>
+&emsp;&emsp;&emsp;MUL - multiplies the two top most elements of the main stack and pushes the result<br>
+&emsp;&emsp;&emsp;DIV - divides the two top most elements of the main stack and pushes the result<br>
+<br>
+&emsp;&emsp;<b>Flow control:</b><br>
+&emsp;&emsp;&emsp;HALT - halts the program<br>
+&emsp;&emsp;&emsp;JMP - jumps to the selected line<br>
+&emsp;&emsp;&emsp;JMPEQ0 - jumps to the selected line if the value on top of the main stack is equal 0<br>
+&emsp;&emsp;&emsp;JMPGT0 - jumps to the selected line if the value on top of the main stack is greater than 0<br>
+&emsp;&emsp;&emsp;JMPMAIN, JMPSTOR - jumps to the selected line if the designated stack is not empty<br>
+&emsp;&emsp;&emsp;JMPNOMAIN, JMPNOSTOR - jumps to the selected line if the designated stack is empty<br>
