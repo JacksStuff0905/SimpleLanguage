@@ -6,6 +6,8 @@ Use $ to write a command<br>
 &emsp;<b>Global commands:</b><br>
 &emsp;&emsp;$project add <i>project_name</i> <i>project_directory(use & at the start to mark the path as relative to the SimpleLanguage.exe file)</i> : adds a project<br> 
 &emsp;&emsp;$project delete <i>project_name</i> : deletes a project<br>
+&emsp;&emsp;$quit : quits the current app<br>
+&emsp;&emsp;$app info : prints the current app info such as its full name<br>
 <br>
 &emsp;<b>Interpreter commands:</b><br>
 &emsp;&emsp;$print stack : prints the last stack<br>
