@@ -1,4 +1,4 @@
-Welcome to SimpleLanguage!
+<h1><b>Welcome to SimpleLanguage!</b></h1>
 
 <b>CLI INSTRUCTIONS:</b><br>
 Use $ to write a command<br>
