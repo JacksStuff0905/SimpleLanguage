@@ -13,18 +13,22 @@ public class CustomCommand<T> where T : App
     private Func<string[], T, string[]> action;
     private Func<string[], string> successMessage;
 
-    public CustomCommand(string condition, Func<string[], T, string[]> action, Func<string[], string> successMessage = null)
+    public (string[], string) HelpMessage;
+
+    public CustomCommand(string condition, (string[], string) HelpMessage, Func<string[], T, string[]> action, Func<string[], string> successMessage = null)
     {
         this.aliases = [condition];
         this.action = action;
         this.successMessage = successMessage;
+        this.HelpMessage = HelpMessage;
     }
 
-    public CustomCommand(string[] aliases, Func<string[], T, string[]> action, Func<string[], string> successMessage = null)
+    public CustomCommand(string[] aliases, (string[], string) HelpMessage, Func<string[], T, string[]> action, Func<string[], string> successMessage = null)
     {
         this.aliases = aliases;
         this.action = action;
         this.successMessage = successMessage;
+        this.HelpMessage = HelpMessage;
     }
 
     public string GetName()

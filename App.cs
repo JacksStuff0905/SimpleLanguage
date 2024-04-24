@@ -333,9 +333,9 @@ public abstract class App
 
     public class QuitException : AppException
     {
-        public QuitException()
+        public QuitException(string message = "Quit application")
         {
-            this.message = "Quit application";
+            this.message = message;
             this.isError = false;
         }
 

@@ -25,13 +25,13 @@ public class Interpreter : App
         string inputFile = "";
         while (inputFile == "")
         {
-            string answer = Ask("File path:", ConsoleColor.Cyan);
+            string answer = Ask("File path: (use % to mark a project e.g. %my_project/main)", ConsoleColor.Cyan);
             string path = answer;            
 
             //Treat as path
             try
             {
-                FileManager.FileManager fm = new FileManager.FileManager(path + ".smpl", "");
+                FileManager.FileManager fm = new FileManager.FileManager(path.EndsWith(".smpl") ? path : path + ".smpl", "");
                 string cont = fm.GetContent();
             }
             catch
@@ -109,7 +109,7 @@ public class Interpreter : App
         {
             base.init();
 
-            PrintLastStack = AddCustomCommand(["stack", "print last stack", "print stack", "last stack", "print last"], (args, app) =>
+            PrintLastStack = AddCustomCommand(["stack", "print last stack", "print stack", "last stack", "print last"], (null, "prints the last stack"), (args, app) =>
             {
                 app.WriteLine("Printing last stack", App.CommandInfoColor);
 

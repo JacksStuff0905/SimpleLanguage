@@ -24,7 +24,7 @@ public class GlobalCommandManager<T> : CustomCommandManager<T> where T : App
     protected override void init()
     {
 
-        AddProject = AddCustomCommand(["project add", "project +"], (args, app) =>
+        AddProject = AddCustomCommand(["project add", "project +"], (["project_name", "project_directory(use & at the start to mark the path as relative to the SimpleLanguage.exe file)"], "adds a project"), (args, app) =>
         {
 
             if (args.Length > 1 && Regex.Match(args[0].Substring(1), @"[\+\\\/\-\%]").Success)
@@ -41,7 +41,7 @@ public class GlobalCommandManager<T> : CustomCommandManager<T> where T : App
             return [args[0], args[1]];
         }, (args) => $"Project {args[0]} with path {args[1]} added succesfully");
 
-        DeleteProject = AddCustomCommand(["project delete", "project -", "project remove"], (args, app) =>
+        DeleteProject = AddCustomCommand(["project delete", "project -", "project remove"], (["project_name"], "deletes a project"), (args, app) =>
         {
             if (args.Length != 1)
             {
@@ -55,13 +55,13 @@ public class GlobalCommandManager<T> : CustomCommandManager<T> where T : App
             return new string[] { args[0], confirm };
         }, (args) => args[1] == "yes"? $"Project {args[0]} succesfully deleted" : "");
 
-        QuitApp = AddCustomCommand(["quit", "exit", "end", "close"], (args, app) =>
+        QuitApp = AddCustomCommand(["quit", "exit", "end", "close"], ([], "close the current app"), (args, app) =>
         {
             app.Quit();
             return [];
         }, (args) => "");
 
-        AppInfo = AddCustomCommand(["app info", "info"], (args, app) =>
+        AppInfo = AddCustomCommand(["app info", "info"], ([], "print the current app info"), (args, app) =>
         {
             string displayName = app.GetDisplayName();
             string shortName = app.GetShortName();

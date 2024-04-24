@@ -9,10 +9,13 @@ using System.Threading.Tasks;
 namespace CustomCommandManager;
 
 public abstract class CustomCommandManager<T> where T : App
-{    
+{
+    public CustomCommand<T> HelpCommand;
+
 
     public CustomCommandManager()
     {
+        this.HelpCommand = AddCustomCommand(["?", "help"], (null, ""), (args, app) => { Help(app); return new string[0]; });
         init();
     }
 
@@ -20,6 +23,8 @@ public abstract class CustomCommandManager<T> where T : App
 
     public Result Handle(string command, T app)
     {
+        if (HelpCommand == null)
+
         if (command == null || command == "")
             return Result.NOT_A_COMMAND;
 
@@ -30,6 +35,12 @@ public abstract class CustomCommandManager<T> where T : App
         }
         command = command.Substring(1);
         command = command.Trim();
+
+        //Handle help
+        if (tryCommand(command, HelpCommand, app) == Result.SUCCESS)
+        {
+            return Result.COMMAND_ERROR;
+        }
 
         //Handle commands
 
@@ -110,20 +121,40 @@ public abstract class CustomCommandManager<T> where T : App
 
     protected List<CustomCommand<T>> customCommands = new List<CustomCommand<T>>();
 
-    protected CustomCommand<T> AddCustomCommand(string condition, Func<string[], T, string[]> action, Func<string[], string> successMessage = null)
+    protected CustomCommand<T> AddCustomCommand(string condition, (string[], string) HelpMessage, Func<string[], T, string[]> action, Func<string[], string> successMessage = null)
     {
-        CustomCommand<T> command = new CustomCommand<T>(condition, action, successMessage);
+        CustomCommand<T> command = new CustomCommand<T>(condition, HelpMessage, action, successMessage);
         this.customCommands.Add(command);
         return command;
     }
 
-    protected CustomCommand<T> AddCustomCommand(string[] aliases, Func<string[], T, string[]> action, Func<string[], string> successMessage = null)
+    protected CustomCommand<T> AddCustomCommand(string[] aliases, (string[], string) HelpMessage, Func<string[], T, string[]> action, Func<string[], string> successMessage = null)
     {
-        CustomCommand<T> command = new CustomCommand<T>(aliases, action, successMessage);
+        CustomCommand<T> command = new CustomCommand<T>(aliases, HelpMessage, action, successMessage);
         this.customCommands.Add(command);
         return command;
     }
 
+
+    public void Help(T app)
+    {
+        app.WriteLine($"Help for {this.GetName()}", ConsoleColor.Green);
+        foreach (CustomCommand<T> command in customCommands)
+        {
+            if (!string.IsNullOrEmpty(command.HelpMessage.Item2))
+            {
+                app.Write($"\t{command.GetName()}", ConsoleColor.Magenta);
+                app.Write($" - [ ");
+                if (command.HelpMessage.Item1 != null)
+                {
+                    foreach (string s in command.HelpMessage.Item1)
+                        app.Write($"{s} ", ConsoleColor.Cyan);
+                }
+                app.Write("]");
+                app.WriteLine($" : {command.HelpMessage.Item2}");
+            }
+        }
+    }
 
 
     public virtual string GetName()
