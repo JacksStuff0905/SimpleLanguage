@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 
 namespace ProjectManager;
 
@@ -16,6 +17,12 @@ public static class ProjectManager
 
     private static Dictionary<string, string> savedProjects = new Dictionary<string, string>();
 
+    public static Dictionary<string, string> GetProjects()
+    {
+        updateDictionary();
+        return new Dictionary<string, string>(savedProjects);
+    }
+
     public static string GetPath(string projectName)
     {
         updateDictionary();
@@ -25,13 +32,14 @@ public static class ProjectManager
     public static void AddProject(string Name, string Path)
     {
         updateDictionary();
+        
         if (savedProjects.ContainsKey(Name))
         {
-            savedProjects[Name] = Path;
+            savedProjects[Name] = fix(Path);
         }
         else
         {
-            savedProjects.Add(Name, Path);
+            savedProjects.Add(Name, fix(Path));
         }
         updateFile();
     }
@@ -51,6 +59,7 @@ public static class ProjectManager
 
     private static void updateFile()
     {
+        fixProjects();
         string newText = JsonSerializer.Serialize(savedProjects);
         File.WriteAllText(ProjectNameFile, newText);
     }
@@ -61,10 +70,29 @@ public static class ProjectManager
         {
             string text = File.ReadAllText(ProjectNameFile);
             savedProjects = JsonSerializer.Deserialize<Dictionary<string, string>>(text);
+            fixProjects();
         }
         catch
         {
             return;
+        }
+    }
+
+    private static string fix(string Path)
+    {
+        string path = Regex.Replace(Path, @"\/", "\\");
+        if (!path.EndsWith('\\'))
+        {
+            path += "\\";
+        }
+        return path;
+    }
+
+    private static void fixProjects()
+    {
+        foreach (KeyValuePair<string, string> pair in savedProjects)
+        {
+            savedProjects[pair.Key] = fix(pair.Value);
         }
     }
 

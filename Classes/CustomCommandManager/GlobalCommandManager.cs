@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace CustomCommandManager;
 
@@ -14,6 +15,8 @@ public class GlobalCommandManager<T> : CustomCommandManager<T> where T : App
     public CustomCommand<T> AddProject;
 
     public CustomCommand<T> DeleteProject;
+
+    public CustomCommand<T> ListProjects;
 
     public CustomCommand<T> QuitApp;
 
@@ -54,6 +57,27 @@ public class GlobalCommandManager<T> : CustomCommandManager<T> where T : App
 
             return new string[] { args[0], confirm };
         }, (args) => args[1] == "yes"? $"Project {args[0]} succesfully deleted" : "");
+
+        ListProjects = AddCustomCommand(["list", "list projects", "projects"], ([], "lists all currently known projects"), (args, app) =>
+        {
+            if (args.Length != 0)
+            {
+                app.Error(new App.CommandException<T>("Invalid parameter count, expected 0, received " + args.Length, ListProjects));
+                return null;
+            }
+
+            app.WriteLine($"Known projects:", App.CommandInfoColor);
+
+            foreach (KeyValuePair<string, string> data in ProjectManager.ProjectManager.GetProjects())
+            {
+                app.Write($"\tname: ", ConsoleColor.Green);
+                app.Write($"{data.Key}", App.AppInfoColor);
+                app.Write($" path: ", ConsoleColor.Green);
+                app.WriteLine($"{data.Value}", App.AppInfoColor);
+            }
+
+            return [ProjectManager.ProjectManager.GetProjects().Count.ToString()];
+        }, (args) => $"Listed out {args[0]} projects");
 
         QuitApp = AddCustomCommand(["quit", "exit", "end", "close"], ([], "close the current app"), (args, app) =>
         {
